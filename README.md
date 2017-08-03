@@ -1,0 +1,1 @@
+Alfresco plugin to automatically process document templates with metadata assigned on it
