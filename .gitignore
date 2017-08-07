@@ -39,3 +39,10 @@ hs_err_pid*
 
 # Dev Data
 /alf_data_dev
+
+# Project developement files
+dev-log4j.properties
+
+platform-hotswap-agent.properties
+disable-webscript-caching-context.xml
+share-hotswap-agent.properties
