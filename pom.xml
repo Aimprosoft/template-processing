@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.alfresco.maven.plugins</groupId>
-    <artifactId>fill-pdf-form-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>AIO - SDK 3.0</name>
-    <description>All-In-One (AIO) project for SDK 3.0</description>
+
+    <groupId>com.aimprosoft</groupId>
+    <artifactId>template-processor</artifactId>
+    <version>1.0</version>
     <packaging>pom</packaging>
+
+    <name>Template Processor</name>
+    <description>An Alfresco extension to allow filling PDF-files with meta-data</description>
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
@@ -305,18 +308,9 @@
                         <!-- Bring in custom Modules -->
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>fill-pdf-form-plugin-platform-jar</artifactId>
+                            <artifactId>template-processor-platform-jar</artifactId>
                             <version>${project.version}</version>
                         </moduleDependency>
-
-                        <!-- Bring in the integration tests -->
-                        <!--<moduleDependency>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>integration-tests</artifactId>
-                            <version>${project.version}</version>
-                            <classifier>tests</classifier>
-                        </moduleDependency>-->
-
                     </platformModules>
 
                     <!--
@@ -326,7 +320,7 @@
                         <!-- Bring in custom Modules -->
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>fill-pdf-form-plugin-share-jar</artifactId>
+                            <artifactId>template-processor-share-jar</artifactId>
                             <version>${project.version}</version>
                         </moduleDependency>
                     </shareModules>
@@ -408,8 +402,7 @@
         </pluginRepository>
     </pluginRepositories>
   <modules>
-    <module>fill-pdf-form-plugin-platform-jar</module>
-    <module>fill-pdf-form-plugin-share-jar</module>
-    <!--<module>integration-tests</module>-->
+    <module>template-processor-platform-jar</module>
+    <module>template-processor-share-jar</module>
   </modules>
 </project>
