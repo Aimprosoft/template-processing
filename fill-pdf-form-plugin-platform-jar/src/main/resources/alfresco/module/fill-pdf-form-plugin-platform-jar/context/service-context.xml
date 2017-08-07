@@ -20,17 +20,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-
-    <bean id="fillPdfBehavior" class="com.aimprosoft.fill.pdf.form.plugin.service.FillPdfModelBehaviorHandler" init-method="init" depends-on="com.aimprosoft.fill.pdf.form.plugin.dictionaryBootstrap">
-        <property name="policyComponent">
-            <ref bean="policyComponent" />
-        </property>
+    <bean id="fillPdfBehavior" class="com.aimprosoft.fill.pdf.form.plugin.service.FillPdfModelBehaviorHandler"
+          init-method="init"
+          depends-on="com.aimprosoft.fill.pdf.form.plugin.dictionaryBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
         <property name="pdfFormService" ref="pdfFormService"/>
     </bean>
 
     <bean id="pdfFormService" class="com.aimprosoft.fill.pdf.form.plugin.service.pdf.form.PdfFormServiceImpl">
         <property name="contentService" ref="ContentService" />
     </bean>
-
 
 </beans>
