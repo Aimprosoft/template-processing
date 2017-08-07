@@ -9,6 +9,7 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.pdfbox.exceptions.COSVisitorException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -47,7 +48,7 @@ public class FillPdfModelBehaviorHandler implements NodeServicePolicies.OnUpdate
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> oldProp, Map<QName, Serializable> newProp) {
         try {
             pdfFormService.fillPdfFormFromMetaData(nodeRef, newProp);
-        } catch (IOException e) {
+        } catch (IOException | COSVisitorException e) {
             e.printStackTrace();
         }
         System.out.println("UPDATING PDF FINISHED");
