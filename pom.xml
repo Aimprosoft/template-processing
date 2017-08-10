@@ -236,7 +236,7 @@
         <!-- Make sure resources in sub-projects are filtered -->
         <resources>
             <resource>
-                <directory>alf_data_dev/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
