@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="fill-pdf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+<model name="aim:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
     <description>Fill pdf plugin model</description>
     <author>Aimprosoft</author>
@@ -15,24 +15,21 @@
     </imports>
 
     <namespaces>
-        <namespace uri="http://www.aimprosoft.com/model/content/1.0" prefix="fill-pdf"/>
+        <namespace uri="http://www.aimprosoft.com/model/content/1.0" prefix="aim"/>
     </namespaces>
 
-    <types>
-        <type name="fill-pdf:document">
-            <title>Fill PDF form document type</title>
-            <parent>cm:content</parent>
-            <mandatory-aspects>
-                <aspect>fill-pdf:isFillPdf</aspect>
-            </mandatory-aspects>
-        </type>
-    </types>
-
     <aspects>
-        <aspect name="fill-pdf:isFillPdf">
-            <title>Is fill PDF</title>
-            <description>Special aspect for checking document type</description>
+        <aspect name="aim:template">
+            <title>Template PDF</title>
+            <description>Special aspect to check if PDF-document was filled in.</description>
+            <properties>
+                <property name="aim:processed">
+                    <title>Document is filled</title>
+                    <description>Property shows the status of the document: filled/not-filled</description>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
         </aspect>
     </aspects>
-
 </model>

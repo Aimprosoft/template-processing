@@ -5,15 +5,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="fillPdfBehavior" class="com.aimprosoft.templateProcessor.service.TemplateProcessorModelBehaviorHandler"
-          init-method="init"
-          depends-on="com.aimprosoft.fill.pdf.form.plugin.dictionaryBootstrap">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="fillPDFFormService" ref="fillPDFFormService"/>
-    </bean>
-
-    <bean id="fillPDFFormService" class="com.aimprosoft.templateProcessor.service.pdf.form.FillPDFFormServiceImpl">
+    <bean id="templateProcessorService" class="com.aimprosoft.templateProcessor.service.pdf.form.TemplateProcessorServiceImpl">
         <property name="contentService" ref="ContentService" />
+        <property name="nodeService" ref="nodeService" />
     </bean>
-
 </beans>

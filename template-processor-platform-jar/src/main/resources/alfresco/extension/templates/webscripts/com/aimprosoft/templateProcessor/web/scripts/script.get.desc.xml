@@ -1,0 +1,10 @@
+<webscript>
+    <shortname>Template Processor WebScript</shortname>
+    <description>Fills PDF-document with property values</description>
+    <url>/template-processor/fill-values</url>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+    <format default="json"/>
+    <family>Template Processor Java-Backed WebScripts</family>
+    <lifecycle>sample</lifecycle>
+</webscript>

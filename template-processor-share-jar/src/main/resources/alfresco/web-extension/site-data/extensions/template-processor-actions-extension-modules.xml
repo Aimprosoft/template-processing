@@ -1,0 +1,37 @@
+<extension>
+    <modules>
+        <module>
+            <id>Add Template Processor Actions to Document Library</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <configurations>
+                <config evaluator="string-compare" condition="DocLibActions">
+                    <actions>
+                        <action id="aim.template.fillPDFFromForm.action"
+                                icon="convert"
+                                type="javascript"
+                                label="aim.template.processor.action.fillPDFFromForm.label">
+                            <param name="function">onActionProceedFillValues</param>
+                            <param name="successMessage">aim.template.action.ActionProceedFillValues.msg.success</param>
+                            <param name="failureMessage">aim.template.action.ActionProceedFillValues.msg.failure</param>
+                            <evaluator>aim.template.document.hasAspect</evaluator>
+                        </action>
+                    </actions>
+                    <actionGroups>
+                        <actionGroup id="document-browse">
+                            <action index="400" id="aim.template.fillPDFFromForm.action" />
+                        </actionGroup>
+                        <actionGroup id="document-details">
+                            <action index="400" id="aim.template.fillPDFFromForm.action" />
+                        </actionGroup>
+                    </actionGroups>
+                </config>
+                <config evaluator="string-compare" condition="DocLibCustom">
+                    <dependencies>
+                        <js src="resources/template-processor-share-jar/components/documentlibrary/template-processor-actions.js" />
+                    </dependencies>
+                </config>
+            </configurations>
+        </module>
+    </modules>
+</extension>
