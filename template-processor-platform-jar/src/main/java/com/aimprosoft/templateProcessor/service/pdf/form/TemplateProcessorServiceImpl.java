@@ -78,10 +78,10 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
     }
 
     /**
-     * <p>{@code fillValues()} fills values to <span>PDF-document</span>
-     * with given {@code nodeRef} from the properties of the document</p>
+     * <p>{@link TemplateProcessorServiceImpl#fillValues(NodeRef)} fills values
+     * to <span>PDF-document</span> with given {@code nodeRef} from the properties of the document</p>
      * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
-     * otherwise the {@link WebScriptException} will be thrown.</p>
+     * otherwise the {@link TemplateProcessingException} will be thrown.</p>
      *
      * @param nodeRef nodeRef of the given <span>PDF-document</span>
      * @throws TemplateProcessingException thrown when errors occur
