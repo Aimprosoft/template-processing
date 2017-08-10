@@ -39,3 +39,4 @@ hs_err_pid*
 
 # Project developement files
 dev-log4j.properties
+/src
