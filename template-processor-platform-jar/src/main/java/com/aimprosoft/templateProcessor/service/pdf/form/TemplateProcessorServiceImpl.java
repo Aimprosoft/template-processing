@@ -41,7 +41,7 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
      * <p>If {@link QName#getPrefixString()} matches {@link PDField#getValue()}, the method takes its value
      * and puts it in the {@link PDAcroForm} field {@link PDField}.</p>
      *
-     * @param nodeRef nodeRef of the document
+     * @param nodeRef     nodeRef of the document
      * @param propertyMap properties of the document
      * @throws TemplateProcessingException thrown when serious injures occur
      */
@@ -52,8 +52,9 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
             ContentWriter cw = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
             PDDocument pdDocument = PDDocument.load(cr.getContentInputStream());
 
-            List<QName> qNames = new ArrayList<>(propertyMap.keySet());
+            @SuppressWarnings("unchecked")
             List<PDField> fields = pdDocument.getDocumentCatalog().getAcroForm().getFields();
+            List<QName> qNames = new ArrayList<>(propertyMap.keySet());
             /*
                 For each PDField field in PDF-document search for related QName name's "prefixed name"
                 and set the values into PDDocument AcroForm field if exists.
@@ -84,7 +85,6 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
      *
      * @param nodeRef nodeRef of the given <span>PDF-document</span>
      * @throws TemplateProcessingException thrown when errors occur
-     *
      * @see PDDocument
      * @see PDAcroForm
      */
@@ -105,6 +105,7 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
