@@ -10,10 +10,5 @@
                 <value>alfresco/module/${project.artifactId}/model/template-processor-model.xml</value>
             </list>
         </property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${project.artifactId}/messages/template-processor-model</value>
-            </list>
-        </property>
     </bean>
 </beans>

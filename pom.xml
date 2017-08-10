@@ -52,9 +52,9 @@
              copy alfresco-global-*.properties files from this directory, such as src/test/properties/local -->
         <env>local</env>
 
-        <!-- Compile with Java 7, default is 5 -->
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <!-- Compile with Java 8 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <!-- Libs used in Unit and Integration tests -->
@@ -163,7 +163,7 @@
         <pluginManagement>
             <plugins>
                 <!--
-                    Build an AMP if 3rd party libs are needed by the extensions
+                    Build an AMP if 3rd party libs are needed by extensionions
                     JARs are the default artifact produced in your modules, if you want to build an amp for each module
                     you have to enable this plugin and inspect the src/main/assembly.xml file if you want to customize
                     the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
@@ -365,9 +365,7 @@
         </plugins>
     </build>
 
-    <!--
-        Alfresco Maven Repositories
-        -->
+    <!-- This repository is only needed to retrieve Alfresco parent POM. NOTE: This can be removed when/if Alfresco will be on Maven Central -->
     <repositories>
         <repository>
             <id>alfresco-public</id>
