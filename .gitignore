@@ -5,9 +5,6 @@
 
 # Log files
 *.log
-alfresco.log
-share.log
-solr.log
 
 # BlueJ files
 *.ctxt
