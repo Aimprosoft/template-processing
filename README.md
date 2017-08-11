@@ -13,7 +13,9 @@ project directory:
     mvn clean install
 
 The command builds JAR files named `template-processor-share-jar-<version>.jar`/`template-processor-share-jar-<version>.amp`,
-`template-processor-platform-jar-<version>.jar`/`template-processor-platform-jar-<version>.amp`  
+`template-processor-platform-jar-<version>.jar`/`template-processor-platform-jar-<version>.amp`
+  into `<project-directory>/template-processor-platform-jar/target/` and 
+  `<project-directory>/template-processor-share-jar/target/` directories.
 
 Installation 
 ------------
