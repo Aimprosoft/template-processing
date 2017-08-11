@@ -9,18 +9,18 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * <p>The PDF should have input fields with unique IDs,
  * that this service uses to get values from Alfresco properties.</p>
  * <p>
- * <p>The only method {@code fillValues()} does all job for
+ * <p>The only method {@code fillTemplate()} does all job for
  * filling data.</p>
  */
-public interface TemplateProcessorService {
+public interface TemplateService {
 
     /**
-     * {@code fillValues()} fills values to <span>PDF-document</span>s
+     * {@code fillTemplate()} fills values to <span>PDF-document</span>s
      * fields from the documents properties.
      *
      * @param nodeRef nodeRef of the given <span>PDF-document</span>
      * @throws TemplateProcessingException thrown when values don't match requirements
      */
-    void fillValues(NodeRef nodeRef) throws TemplateProcessingException;
+    void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException;
 
 }
