@@ -12,7 +12,6 @@ import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.springframework.extensions.webscripts.WebScriptException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -22,12 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Implementation of {@link TemplateProcessorService}
+ * Implementation of {@link TemplateService}
  */
-public class TemplateProcessorServiceImpl implements TemplateProcessorService {
+public class TemplateServiceImpl implements TemplateService {
 
     /* Logger*/
-    private static Log logger = LogFactory.getLog(TemplateProcessorServiceImpl.class);
+    private static Log logger = LogFactory.getLog(TemplateServiceImpl.class);
 
     /* Alfresco Services */
     private ContentService contentService;
@@ -72,13 +71,12 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
             }
             pdDocument.save(cw.getContentOutputStream());
         } catch (IOException | COSVisitorException e) {
-            logger.error("Error while filling values into PDF-document");
             throw new TemplateProcessingException("Error converting values into PDF-document", e);
         }
     }
 
     /**
-     * <p>{@link TemplateProcessorServiceImpl#fillValues(NodeRef)} fills values
+     * <p>{@link TemplateServiceImpl#fillTemplate(NodeRef)} fills values
      * to <span>PDF-document</span> with given {@code nodeRef} from the properties of the document</p>
      * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
      * otherwise the {@link TemplateProcessingException} will be thrown.</p>
@@ -89,7 +87,7 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
      * @see PDAcroForm
      */
     @Override
-    public void fillValues(NodeRef nodeRef) throws TemplateProcessingException {
+    public void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException {
         if (contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT)
                 .getMimetype().equals(MimetypeMap.MIMETYPE_PDF)) {
             fillPdfFormFromMetaData(nodeRef, nodeService.getProperties(nodeRef));

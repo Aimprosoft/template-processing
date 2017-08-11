@@ -1,7 +1,7 @@
 package com.aimprosoft.templateProcessor.web.scripts;
 
 import com.aimprosoft.templateProcessor.exceptions.TemplateProcessingException;
-import com.aimprosoft.templateProcessor.service.pdf.form.TemplateProcessorService;
+import com.aimprosoft.templateProcessor.service.pdf.form.TemplateService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.logging.Log;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class TemplateProcessorScript extends AbstractWebScript {
 
     /* Alfresco services*/
-    private TemplateProcessorService service;
+    private TemplateService service;
     private NodeService nodeService;
 
     /* Logger */
@@ -48,7 +48,7 @@ public class TemplateProcessorScript extends AbstractWebScript {
             if (!nodeService.exists(nodeRef)) {
                 throw new WebScriptException("Node doesn't exist");
             }
-            service.fillValues(nodeRef);
+            service.fillTemplate(nodeRef);
             obj.put("message", RESPONSE_MSG);
             res.getWriter().write(obj.toString());
         } catch (JSONException | TemplateProcessingException e) {
@@ -60,7 +60,7 @@ public class TemplateProcessorScript extends AbstractWebScript {
     }
 
     /* Setters */
-    public void setService(TemplateProcessorService service) {
+    public void setService(TemplateService service) {
         this.service = service;
     }
     public void setNodeService(NodeService nodeService) {

@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="templateProcessorService" class="com.aimprosoft.templateProcessor.service.pdf.form.TemplateProcessorServiceImpl">
+    <bean id="templateProcessorService" class="com.aimprosoft.templateProcessor.service.pdf.form.TemplateServiceImpl">
         <property name="contentService" ref="ContentService" />
         <property name="nodeService" ref="nodeService" />
     </bean>
