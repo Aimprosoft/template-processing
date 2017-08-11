@@ -105,7 +105,6 @@ public class TemplateProcessorServiceImpl implements TemplateProcessorService {
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }

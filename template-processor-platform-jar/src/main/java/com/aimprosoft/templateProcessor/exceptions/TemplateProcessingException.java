@@ -1,7 +1,8 @@
 package com.aimprosoft.templateProcessor.exceptions;
 
 /**
- * Exception thrown when errors occurred in {@code TemplateProcessorService}
+ * Common exception {@code TemplateProcessingException}
+ * thrown when system processes templates
  */
 public class TemplateProcessingException extends Exception {
 

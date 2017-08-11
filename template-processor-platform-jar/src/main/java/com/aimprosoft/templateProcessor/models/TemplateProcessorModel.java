@@ -10,4 +10,6 @@ public final class TemplateProcessorModel {
     public final static String PROPERTY_LOCAL_NAME = "processed";
 
     public final static QName ASPECT_PROPERTY = QName.createQName(NAMESPACE_URI, PROPERTY_LOCAL_NAME);
+
+    private TemplateProcessorModel(){}
 }
