@@ -64,7 +64,7 @@ public class TemplateServiceImpl implements TemplateService {
                     field.setValue(value);
                     logger.debug("Field from PDF-document was filled in: " + fieldName);
                 } else {
-                    logger.error("Field from PDF-document not found in meta-data properties: " + fieldName);
+                    logger.debug("Field from PDF-document not found in meta-data properties: " + fieldName);
                 }
             }
             pdDocument.save(cw.getContentOutputStream());
