@@ -74,7 +74,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     /**
-     * Creates {@link QName qName} from <span>PDF-document</span>'s input field's ID
+     * Creates {@link QName qName} from <span>PDF-document</span>'s input field ID
      * or logs error if it's not possible to create {@code QName}
      *
      * @param name prefixed {@link QName#getPrefixString()} name
