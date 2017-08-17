@@ -8,5 +8,6 @@
     <bean id="templateProcessorService" class="com.aimprosoft.templateProcessor.service.pdf.form.TemplateServiceImpl">
         <property name="contentService" ref="ContentService" />
         <property name="nodeService" ref="nodeService" />
+        <property name="namespaceService" ref="namespaceService" />
     </bean>
 </beans>

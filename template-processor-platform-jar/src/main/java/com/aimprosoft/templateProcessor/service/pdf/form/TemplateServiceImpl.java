@@ -5,6 +5,7 @@ import com.aimprosoft.templateProcessor.models.TemplateProcessorModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,10 +16,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation of {@link TemplateService}
@@ -31,6 +30,7 @@ public class TemplateServiceImpl implements TemplateService {
     /* Alfresco Services */
     private ContentService contentService;
     private NodeService nodeService;
+    private NamespaceService namespaceService;
 
     /**
      * <p>Fills values into the <span>PDF-document</span> using {@link Map propertyMap}</p>
@@ -53,20 +53,18 @@ public class TemplateServiceImpl implements TemplateService {
 
             @SuppressWarnings("unchecked")
             List<PDField> fields = pdDocument.getDocumentCatalog().getAcroForm().getFields();
-            List<QName> qNames = new ArrayList<>(propertyMap.keySet());
             /*
                 For each PDField field in PDF-document search for related QName name's "prefixed name"
                 and set the values into PDDocument AcroForm field if exists.
             */
             for (PDField field : fields) {
-                Optional<QName> name = qNames.stream()
-                        .filter(n -> n.getPrefixString().equals(field.getPartialName()))
-                        .findFirst();
-                if (name.isPresent()) {
-                    field.setValue(propertyMap.get(name.get()).toString());
-                    logger.debug("Field from PDF-document was filled in: " + field.getPartialName());
+                String fieldName = field.getPartialName();
+                String value = (String) propertyMap.get(createQName(fieldName));
+                if (value != null) {
+                    field.setValue(value);
+                    logger.debug("Field from PDF-document was filled in: " + fieldName);
                 } else {
-                    logger.error("Field from PDF-document not found in meta-data properties: " + field.getPartialName());
+                    logger.error("Field from PDF-document not found in meta-data properties: " + fieldName);
                 }
             }
             pdDocument.save(cw.getContentOutputStream());
@@ -76,8 +74,24 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     /**
-     * <p>{@link TemplateServiceImpl#fillTemplate(NodeRef)} fills values
-     * to <span>PDF-document</span> with given {@code nodeRef} from the properties of the document</p>
+     * Creates {@link QName qName} from <span>PDF-document</span>'s input field's ID
+     * or logs error if it's not possible to create {@code QName}
+     *
+     * @param name prefixed {@link QName#getPrefixString()} name
+     * @return {@code QName} if it is possible to create one or
+     * {@code null} if it's not
+     */
+    private QName createQName(String name) {
+        QName qName = null;
+        if (name != null && !name.equals("")) {
+            qName = QName.createQName(name, namespaceService);
+        }
+        return qName;
+    }
+
+    /**
+     * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
+     * from the properties of the document</p>
      * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
      * otherwise the {@link TemplateProcessingException} will be thrown.</p>
      *
@@ -103,7 +117,12 @@ public class TemplateServiceImpl implements TemplateService {
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
+
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 }
