@@ -19,7 +19,6 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
 
     /* Alfresco services*/
     private TemplateService service;
-    private NodeService nodeService;
 
     /* Logger */
     private static Log logger = LogFactory.getLog(TemplateProcessorScript.class);
@@ -53,8 +52,5 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
     /* Setters */
     public void setService(TemplateService service) {
         this.service = service;
-    }
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
     }
 }

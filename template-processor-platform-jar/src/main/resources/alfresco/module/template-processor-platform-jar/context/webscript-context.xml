@@ -9,6 +9,5 @@
 		  class="com.aimprosoft.templateProcessor.web.scripts.TemplateProcessorScript"
 		  parent="webscript">
 		<property name="service" ref="templateProcessorService"/>
-		<property name="nodeService" ref="nodeService" />
 	</bean>
 </beans>
