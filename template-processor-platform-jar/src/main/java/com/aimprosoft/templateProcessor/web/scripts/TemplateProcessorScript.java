@@ -40,10 +40,7 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
     public Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> model = new HashMap<>();
         try {
-            final NodeRef nodeRef = new NodeRef(req.getParameter(REQUEST_PARAM));
-            if (!nodeService.exists(nodeRef)) {
-                throw new WebScriptException("Node doesn't exist");
-            }
+            NodeRef nodeRef = new NodeRef(req.getParameter(REQUEST_PARAM));
             service.fillTemplate(nodeRef);
             model.put("message", RESPONSE_MSG);
         } catch (TemplateProcessingException e) {
