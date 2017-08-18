@@ -6,20 +6,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.extensions.webscripts.AbstractWebScript;
-import org.springframework.extensions.webscripts.WebScriptException;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.springframework.extensions.webscripts.*;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Java Web-script.
  * Executes filling values in PDF-document
  */
-public class TemplateProcessorScript extends AbstractWebScript {
+public class TemplateProcessorScript extends DeclarativeWebScript {
 
     /* Alfresco services*/
     private TemplateService service;
@@ -30,33 +26,31 @@ public class TemplateProcessorScript extends AbstractWebScript {
 
     /* Messages */
     private static final String RESPONSE_MSG = "Fill PDF-document completed.";
-    private static final String ERROR_MSG = "Unable to fill values.";
+    private static final String ERROR_MSG = "Error converting values into PDF-document";
     private static final String REQUEST_PARAM = "nodeRef";
 
     /**
-     * Executes web-script
+     * Executes Web-script
      *
      * @param req request
-     * @param res response
-     * @throws IOException thrown when unexpected errors occur
+     * @param status status
+     * @param cache cache
+     * @return {@link Map model}
      */
-    @Override
-    public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
+    public Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
+        Map<String, Object> model = new HashMap<>();
         try {
-            final JSONObject obj = new JSONObject();
             final NodeRef nodeRef = new NodeRef(req.getParameter(REQUEST_PARAM));
             if (!nodeService.exists(nodeRef)) {
                 throw new WebScriptException("Node doesn't exist");
             }
             service.fillTemplate(nodeRef);
-            obj.put("message", RESPONSE_MSG);
-            res.getWriter().write(obj.toString());
-        } catch (JSONException | TemplateProcessingException e) {
-            logger.error(ERROR_MSG);
-            throw new WebScriptException(e.getMessage(), e);
-        } finally {
-            logger.debug(RESPONSE_MSG);
+            model.put("message", RESPONSE_MSG);
+        } catch (TemplateProcessingException e) {
+            logger.error(ERROR_MSG, e);
+            throw new WebScriptException(ERROR_MSG, e);
         }
+        return model;
     }
 
     /* Setters */

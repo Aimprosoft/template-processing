@@ -12,6 +12,7 @@
                 success: {
                     callback: {
                         fn: function (response) {
+                            debugger;
                             popup.destroy();
                             Alfresco.util.PopupManager.displayPrompt({
                                 title: this.msg("aim.template.action.ActionProceedFillValues.msg.success"),
@@ -50,7 +51,7 @@
                     }
                 },
                 webscript: {
-                    name: "/template-processor/fill-values?nodeRef={nodeRef}",
+                    name: "/aim/template-processor/fill-values?nodeRef={nodeRef}",
                     stem: Alfresco.constants.PROXY_URI,
                     method: Alfresco.util.Ajax.GET,
                     params: {

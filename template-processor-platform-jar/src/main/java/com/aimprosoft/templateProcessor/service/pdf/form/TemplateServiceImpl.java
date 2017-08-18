@@ -5,8 +5,10 @@ import com.aimprosoft.templateProcessor.models.TemplateProcessorModel;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.exceptions.COSVisitorException;
@@ -78,13 +80,17 @@ public class TemplateServiceImpl implements TemplateService {
      * or logs error if it's not possible to create {@code QName}
      *
      * @param name prefixed {@link QName#getPrefixString()} name
-     * @return {@code QName} if it is possible to create one or
-     * {@code null} if it's not
+     * @return {@code QName} if it is possible to create one
+     * or {@code null} if it's not
      */
     private QName createQName(String name) {
         QName qName = null;
-        if (name != null && !name.equals("")) {
-            qName = QName.createQName(name, namespaceService);
+        if (StringUtils.isNotBlank(name)) {
+            try {
+                qName = QName.createQName(name, namespaceService);
+            } catch (NamespaceException e) {
+                logger.error("Can't create QName: " + name, e);
+            }
         }
         return qName;
     }
@@ -102,14 +108,17 @@ public class TemplateServiceImpl implements TemplateService {
      */
     @Override
     public void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException {
-        if (contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT)
-                .getMimetype().equals(MimetypeMap.MIMETYPE_PDF)) {
+        String mimeType = contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT).getMimetype();
+        String requiredMimeType = MimetypeMap.MIMETYPE_PDF;
+        if (mimeType.equals(requiredMimeType)) {
             fillPdfFormFromMetaData(nodeRef, nodeService.getProperties(nodeRef));
 
-            /* Mark property when PDF-document is filled in with values*/
+            /* Mark property when PDF-document is filled in with values */
             nodeService.setProperty(nodeRef, TemplateProcessorModel.ASPECT_PROPERTY, true);
         } else {
-            throw new TemplateProcessingException("Content type should be '" + MimetypeMap.MIMETYPE_PDF + "'.");
+            String msg = "Content type should be '" + requiredMimeType + "'. " +
+                    "Content type '" + mimeType + "' is not supported.";
+            throw new TemplateProcessingException(msg);
         }
     }
 
