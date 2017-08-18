@@ -12,7 +12,6 @@
                 success: {
                     callback: {
                         fn: function (response) {
-                            debugger;
                             popup.destroy();
                             Alfresco.util.PopupManager.displayPrompt({
                                 title: this.msg("aim.template.action.ActionProceedFillValues.msg.success"),
