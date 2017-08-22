@@ -45,8 +45,10 @@ public class TemplateServiceImpl implements TemplateService {
      * @param nodeRef     nodeRef of the document
      * @param propertyMap properties of the document
      * @throws TemplateProcessingException thrown when serious injures occur
+     * @see PDDocument
+     * @see PDAcroForm
      */
-    private void fillPdfFormFromMetaData(NodeRef nodeRef, Map<QName, Serializable> propertyMap)
+    private void fillTemplate(NodeRef nodeRef, Map<QName, Serializable> propertyMap)
             throws TemplateProcessingException {
         try {
             ContentReader cr = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
@@ -56,32 +58,32 @@ public class TemplateServiceImpl implements TemplateService {
             @SuppressWarnings("unchecked")
             List<PDField> fields = pdDocument.getDocumentCatalog().getAcroForm().getFields();
             /*
-                For each PDField field in PDF-document search for related QName name's "prefixed name"
-                and set the values into PDDocument AcroForm field if exists.
+               For each PDField field in the template searches for QName's "prefixed name"
+                and set the values into PDDocument's AcroForm field if exists.
             */
             for (PDField field : fields) {
                 String fieldName = field.getPartialName();
                 String value = (String) propertyMap.get(createQName(fieldName));
                 if (value != null) {
                     field.setValue(value);
-                    logger.debug("Field from PDF-document was filled in: " + fieldName);
+                    logger.debug("Field from template was filled in: " + fieldName);
                 } else {
-                    logger.debug("Field from PDF-document not found in meta-data properties: " + fieldName);
+                    logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
                 }
             }
             pdDocument.save(cw.getContentOutputStream());
         } catch (IOException | COSVisitorException e) {
-            throw new TemplateProcessingException("Error converting values into PDF-document", e);
+            throw new TemplateProcessingException("Error occurred while filling values in the template.", e);
         }
     }
 
     /**
      * Creates {@link QName qName} from <span>PDF-document</span>'s input field ID
-     * or logs error if it's not possible to create {@code QName}
+     * or logs error if it's not possible to create {@code QName}.
      *
      * @param name prefixed {@link QName#getPrefixString()} name
      * @return {@code QName} if it is possible to create one
-     * or {@code null} if it's not
+     * or {@code null} if it's not.
      */
     private QName createQName(String name) {
         QName qName = null;
@@ -89,7 +91,7 @@ public class TemplateServiceImpl implements TemplateService {
             try {
                 qName = QName.createQName(name, namespaceService);
             } catch (NamespaceException e) {
-                logger.error("Can't create QName: " + name, e);
+                logger.debug(name + " QName is not resolved.", e);
             }
         }
         return qName;
@@ -98,23 +100,29 @@ public class TemplateServiceImpl implements TemplateService {
     /**
      * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
      * from the properties of the document</p>
+     * <p>Creates the {@link NodeRef node} and checks if it exists. If {@code String nodeRef} is
+     * not valid or {@link NodeRef node} doesn't exist it throws
+     * a {@link TemplateProcessingException exception}</p>
+     * <p>If {@link NodeRef node} is valid - it goes to filling values in template.</p>
      * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
      * otherwise the {@link TemplateProcessingException} will be thrown.</p>
      *
      * @param nodeRef nodeRef of the given <span>PDF-document</span>
      * @throws TemplateProcessingException thrown when errors occur
-     * @see PDDocument
-     * @see PDAcroForm
      */
     @Override
-    public void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException {
-        String mimeType = contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT).getMimetype();
+    public void fillTemplate(String nodeRef) throws TemplateProcessingException {
+        NodeRef node = new NodeRef(nodeRef);
+        if (!nodeService.exists(node)) {
+            throw new TemplateProcessingException("Node '" + nodeRef + "' doesn't exist.");
+        }
+        String mimeType = contentService.getReader(node, ContentModel.TYPE_CONTENT).getMimetype();
         String requiredMimeType = MimetypeMap.MIMETYPE_PDF;
         if (mimeType.equals(requiredMimeType)) {
-            fillPdfFormFromMetaData(nodeRef, nodeService.getProperties(nodeRef));
+            fillTemplate(node, nodeService.getProperties(node));
 
             /* Mark property when PDF-document is filled in with values */
-            nodeService.setProperty(nodeRef, TemplateProcessorModel.ASPECT_PROPERTY, true);
+            nodeService.setProperty(node, TemplateProcessorModel.ASPECT_PROPERTY, true);
         } else {
             String msg = "Content type should be '" + requiredMimeType + "'. " +
                     "Content type '" + mimeType + "' is not supported.";

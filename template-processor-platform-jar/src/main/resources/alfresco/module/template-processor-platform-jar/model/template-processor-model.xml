@@ -25,7 +25,7 @@
             <properties>
                 <property name="aim:processed">
                     <title>Document is filled</title>
-                    <description>Property shows the status of the document: filled/not-filled</description>
+                    <description>The status of the document: filled, not-filled.</description>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>

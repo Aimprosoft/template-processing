@@ -20,12 +20,8 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
     /* Alfresco services*/
     private TemplateService service;
 
-    /* Logger */
-    private static Log logger = LogFactory.getLog(TemplateProcessorScript.class);
-
     /* Messages */
-    private static final String RESPONSE_MSG = "Fill PDF-document completed.";
-    private static final String ERROR_MSG = "Error converting values into PDF-document";
+    private static final String RESPONSE_MSG = "All values were filled in the template. ";
     private static final String REQUEST_PARAM = "nodeRef";
 
     /**
@@ -39,12 +35,10 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
     public Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> model = new HashMap<>();
         try {
-            NodeRef nodeRef = new NodeRef(req.getParameter(REQUEST_PARAM));
-            service.fillTemplate(nodeRef);
+            service.fillTemplate(req.getParameter(REQUEST_PARAM));
             model.put("message", RESPONSE_MSG);
         } catch (TemplateProcessingException e) {
-            logger.error(ERROR_MSG, e);
-            throw new WebScriptException(ERROR_MSG, e);
+            throw new WebScriptException(e.getMessage(), e);
         }
         return model;
     }

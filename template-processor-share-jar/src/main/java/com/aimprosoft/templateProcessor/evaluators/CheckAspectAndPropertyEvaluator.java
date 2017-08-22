@@ -1,7 +1,6 @@
 package com.aimprosoft.templateProcessor.evaluators;
 
 import org.alfresco.web.evaluator.BaseEvaluator;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -17,8 +16,9 @@ public class CheckAspectAndPropertyEvaluator extends BaseEvaluator {
     private String property;
 
     /**
-     * Checks if the document has the aspect like a {@link CheckAspectAndPropertyEvaluator#aspect}
-     * and the value of the aspects property like a {@link CheckAspectAndPropertyEvaluator#property}
+     * <p>Checks if the document has the aspect {@link CheckAspectAndPropertyEvaluator#aspect}
+     * and the value of the property {@link CheckAspectAndPropertyEvaluator#property}
+     * is {@code false}</p>
      *
      * @param jsonObject object with properties
      * @return {@code true} if the aspect is present and the value of the aspects property is {@code false},
@@ -26,17 +26,16 @@ public class CheckAspectAndPropertyEvaluator extends BaseEvaluator {
      */
     @Override
     public boolean evaluate(JSONObject jsonObject) {
-        JSONArray nodeAspects = getNodeAspects(jsonObject);
-        return nodeAspects != null
-                && nodeAspects.contains(aspect)
-                && !Boolean.valueOf(getProperty(jsonObject, property).toString());
+        return getNodeAspects(jsonObject).contains(aspect)
+                && "false".equals(getProperty(jsonObject, property));
     }
 
     /* Setters*/
-    public void setAspect(String aspect) {
-        this.aspect = aspect;
-    }
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    public void setAspect(String aspect) {
+        this.aspect = aspect;
     }
 }
