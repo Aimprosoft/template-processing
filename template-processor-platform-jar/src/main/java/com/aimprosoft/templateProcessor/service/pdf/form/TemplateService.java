@@ -21,6 +21,6 @@ public interface TemplateService {
      * @param nodeRef nodeRef of the given <span>PDF-document</span>
      * @throws TemplateProcessingException thrown when values don't match requirements
      */
-    void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException;
+    void fillTemplate(String nodeRef) throws TemplateProcessingException;
 
 }
