@@ -1,9 +1,9 @@
 (function () {
     YAHOO.Bubbling.fire("registerAction", {
-        actionName: "onActionProceedFillValues",
+        actionName: "onActionProceedTemplate",
         fn: function (file) {
             this.widgets.waitDialog = Alfresco.util.PopupManager.displayMessage({
-                text: this.msg("aim.template.action.ActionProceedFillValues.msg.proceed.msg"),
+                text: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.proceed"),
                 spanClass: "wait",
                 displayTime: 0
             });
@@ -14,7 +14,7 @@
                         fn: function (response) {
                             popup.destroy();
                             Alfresco.util.PopupManager.displayPrompt({
-                                title: this.msg("aim.template.action.ActionProceedFillValues.msg.success"),
+                                title: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.success"),
                                 text: response.json.message,
                                 buttons: [{
                                     text: this.msg("button.ok"),
@@ -35,7 +35,7 @@
                         fn: function (response) {
                             popup.destroy();
                             Alfresco.util.PopupManager.displayPrompt({
-                                title: this.msg("aim.template.action.ActionProceedFillValues.msg.failure"),
+                                title: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.failure"),
                                 text: response.json.message,
                                 buttons: [{
                                     text: this.msg("button.ok"),
