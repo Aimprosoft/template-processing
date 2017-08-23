@@ -35,6 +35,41 @@ public class TemplateServiceImpl implements TemplateService {
     private NamespaceService namespaceService;
 
     /**
+     * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
+     * from the properties of the document</p>
+     * <p>Creates the {@link NodeRef node} and checks if it exists. If {@code String nodeRef} is
+     * not valid or {@link NodeRef node} doesn't exist it throws
+     * a {@link TemplateProcessingException exception}</p>
+     * <p>If {@link NodeRef node} is valid - it goes to filling values in template.</p>
+     * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
+     * otherwise the {@link TemplateProcessingException} will be thrown.</p>
+     *
+     * @param nodeRef nodeRef of the given <span>PDF-document</span>
+     * @throws TemplateProcessingException thrown when errors occur
+     */
+    @Override
+    public void fillTemplate(NodeRef nodeRef) throws TemplateProcessingException {
+        if (!nodeService.exists(nodeRef)) {
+            throw new TemplateProcessingException("Node '" + nodeRef.toString() + "' doesn't exist.");
+        }
+        if(!nodeService.hasAspect(nodeRef, TemplateProcessorModel.ASPECT_TEMPLATE)){
+            throw new TemplateProcessingException("The document doesn't have required aspect 'aim:template'.");
+        }
+        String mimeType = contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT).getMimetype();
+        String requiredMimeType = MimetypeMap.MIMETYPE_PDF;
+        if (mimeType.equals(requiredMimeType)) {
+            fillTemplate(nodeRef, nodeService.getProperties(nodeRef));
+
+            /* Mark property when PDF-document is filled in with values */
+            nodeService.setProperty(nodeRef, TemplateProcessorModel.PROP_PROCESSED, true);
+        } else {
+            String msg = "Content type should be '" + requiredMimeType + "'. " +
+                    "Content type '" + mimeType + "' is not supported.";
+            throw new TemplateProcessingException(msg);
+        }
+    }
+
+    /**
      * <p>Fills values into the <span>PDF-document</span> using {@link Map propertyMap}</p>
      * <p>The <span>PDF-document</span> should contain input fields that are marked with
      * unique IDs. The method searches for the IDs, takes them and for each ID
@@ -95,39 +130,6 @@ public class TemplateServiceImpl implements TemplateService {
             }
         }
         return qName;
-    }
-
-    /**
-     * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
-     * from the properties of the document</p>
-     * <p>Creates the {@link NodeRef node} and checks if it exists. If {@code String nodeRef} is
-     * not valid or {@link NodeRef node} doesn't exist it throws
-     * a {@link TemplateProcessingException exception}</p>
-     * <p>If {@link NodeRef node} is valid - it goes to filling values in template.</p>
-     * <p>The {@link NodeRef nodeRef} should have mime-type {@link MimetypeMap#MIMETYPE_PDF},
-     * otherwise the {@link TemplateProcessingException} will be thrown.</p>
-     *
-     * @param nodeRef nodeRef of the given <span>PDF-document</span>
-     * @throws TemplateProcessingException thrown when errors occur
-     */
-    @Override
-    public void fillTemplate(String nodeRef) throws TemplateProcessingException {
-        NodeRef node = new NodeRef(nodeRef);
-        if (!nodeService.exists(node)) {
-            throw new TemplateProcessingException("Node '" + nodeRef + "' doesn't exist.");
-        }
-        String mimeType = contentService.getReader(node, ContentModel.TYPE_CONTENT).getMimetype();
-        String requiredMimeType = MimetypeMap.MIMETYPE_PDF;
-        if (mimeType.equals(requiredMimeType)) {
-            fillTemplate(node, nodeService.getProperties(node));
-
-            /* Mark property when PDF-document is filled in with values */
-            nodeService.setProperty(node, TemplateProcessorModel.ASPECT_PROPERTY, true);
-        } else {
-            String msg = "Content type should be '" + requiredMimeType + "'. " +
-                    "Content type '" + mimeType + "' is not supported.";
-            throw new TemplateProcessingException(msg);
-        }
     }
 
     /* Setters */

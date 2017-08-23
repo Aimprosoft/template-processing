@@ -50,7 +50,7 @@
                     }
                 },
                 webscript: {
-                    name: "/aim/template-processor/fill-values?nodeRef={nodeRef}",
+                    name: "/aim/template-processor/fill-document?nodeRef={nodeRef}",
                     stem: Alfresco.constants.PROXY_URI,
                     method: Alfresco.util.Ajax.GET,
                     params: {
