@@ -15,10 +15,11 @@
     </bean>
 
     <!-- Check property value of the "aim:processed" property -->
-    <bean id="aim.template.document.hasAspect"
-          class="com.aimprosoft.templateProcessor.evaluators.CheckAspectAndPropertyEvaluator">
+    <bean id="com.aimprosoft.templateProcessor.evaluators.AspectAndPropertyEvaluator"
+          class="com.aimprosoft.templateProcessor.evaluators.AspectAndPropertyEvaluator">
         <property name="aspect" value="aim:template" />
-        <property name="property" value="aim:processed" />
+        <property name="propertyName" value="aim:processed" />
+        <property name="propertyValue" value="false" />
     </bean>
 
 </beans>
