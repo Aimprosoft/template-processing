@@ -21,7 +21,7 @@
     <aspects>
         <aspect name="aim:template">
             <title>Template PDF</title>
-            <description>Special aspect to check if PDF-document was filled in.</description>
+            <description>Special aspect for check if the document was filled in.</description>
             <properties>
                 <property name="aim:processed">
                     <title>Document is filled</title>
