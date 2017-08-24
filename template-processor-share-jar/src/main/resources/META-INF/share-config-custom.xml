@@ -1,0 +1,23 @@
+<alfresco-config>
+    <!-- Visibility of the Action in the Document Library-->
+
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <aspects>
+            <visible>
+                <aspect name="aim:template"/>
+            </visible>
+        </aspects>
+    </config>
+
+    <!-- Add property to forms of the documents with aspect "aim:template" -->
+
+    <config evaluator="aspect" condition="aim:template">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="aim:processed" />
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+</alfresco-config>

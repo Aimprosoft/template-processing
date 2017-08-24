@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="aim:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <description>Template Processor plugin model</description>
+    <author>Aimprosoft</author>
+    <version>1.0</version>
+
+    <imports>
+        <!-- Import Alfresco Dictionary Definitions -->
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <!-- Import Alfresco Content Domain Model Definitions -->
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <!-- Import Alfresco System Model Definitions -->
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.aimprosoft.com/model/content/1.0" prefix="aim"/>
+    </namespaces>
+
+    <aspects>
+        <aspect name="aim:template">
+            <title>Template PDF</title>
+            <description>Special aspect for check if the document was filled in.</description>
+            <properties>
+                <property name="aim:processed">
+                    <title>Document is filled</title>
+                    <description>The status of the document: filled, not-filled.</description>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
+    </aspects>
+</model>

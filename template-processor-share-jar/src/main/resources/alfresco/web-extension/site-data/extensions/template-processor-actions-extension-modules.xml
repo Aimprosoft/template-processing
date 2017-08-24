@@ -1,0 +1,35 @@
+<extension>
+    <modules>
+        <module>
+            <id>Add Template Processor Actions to Document Library</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <configurations>
+                <config evaluator="string-compare" condition="DocLibActions">
+                    <actions>
+                        <action id="com.aimprosoft.templateProcessor.action.ProceedTemplate"
+                                icon="convert"
+                                type="javascript"
+                                label="com.aimprosoft.templateProcessor.action.ProceedTemplate.label">
+                            <param name="function">onActionProceedTemplate</param>
+                            <evaluator>com.aimprosoft.templateProcessor.evaluators.AspectAndPropertyEvaluator</evaluator>
+                        </action>
+                    </actions>
+                    <actionGroups>
+                        <actionGroup id="document-browse">
+                            <action index="400" id="com.aimprosoft.templateProcessor.action.ProceedTemplate" />
+                        </actionGroup>
+                        <actionGroup id="document-details">
+                            <action index="400" id="com.aimprosoft.templateProcessor.action.ProceedTemplate" />
+                        </actionGroup>
+                    </actionGroups>
+                </config>
+                <config evaluator="string-compare" condition="DocLibCustom">
+                    <dependencies>
+                        <js src="resources/template-processor-share-jar/components/documentlibrary/template-processor-actions.js" />
+                    </dependencies>
+                </config>
+            </configurations>
+        </module>
+    </modules>
+</extension>

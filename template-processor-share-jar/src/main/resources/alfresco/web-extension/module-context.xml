@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Add module specific messages and labels -->
+    <bean id="com.aimprosoft.templateProcessor.template-processor-share-jar.resources"
+          class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+        <property name="resourceBundles">
+            <list>
+                <value>alfresco.web-extension.messages.template-processor-actions</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Check property value of the "aim:processed" property -->
+    <bean id="com.aimprosoft.templateProcessor.evaluators.AspectAndPropertyEvaluator"
+          class="com.aimprosoft.templateProcessor.evaluators.AspectAndPropertyEvaluator">
+        <property name="aspect" value="aim:template" />
+        <property name="propertyName" value="aim:processed" />
+        <property name="propertyValue" value="false" />
+    </bean>
+
+</beans>
