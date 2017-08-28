@@ -87,26 +87,33 @@ public class TemplateServiceImpl implements TemplateService {
             throws TemplateProcessingException {
         try {
             ContentReader cr = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
-            ContentWriter cw = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
             PDDocument pdDocument = PDDocument.load(cr.getContentInputStream());
+            PDAcroForm acroForm = pdDocument.getDocumentCatalog().getAcroForm();
 
-            @SuppressWarnings("unchecked")
-            List<PDField> fields = pdDocument.getDocumentCatalog().getAcroForm().getFields();
-            /*
-               For each PDField field in the template searches for QName's "prefixed name"
-                and set the values into PDDocument's AcroForm field if exists.
-            */
-            for (PDField field : fields) {
-                String fieldName = field.getPartialName();
-                String value = (String) propertyMap.get(createQName(fieldName));
-                if (value != null) {
-                    field.setValue(value);
-                    logger.debug("Field from template was filled in: " + fieldName);
-                } else {
-                    logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
+            if (acroForm == null) {
+                logger.debug("Template doesn't have AcroForm.");
+            } else {
+                @SuppressWarnings("unchecked")
+                List<PDField> fields = acroForm.getFields();
+                /*
+                   For each PDField field in the template searches for QName's "prefixed name"
+                    and set the values into PDDocument's AcroForm field if exists.
+                */
+                for (PDField field : fields) {
+                    String fieldName = field.getPartialName();
+                    String value = (String) propertyMap.get(createQName(fieldName));
+                    if (value != null) {
+                        field.setValue(value);
+                        logger.debug("Field from template was filled in: " + fieldName);
+                    } else {
+                        logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
+                    }
                 }
+
+                /* Save template */
+                ContentWriter cw = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+                pdDocument.save(cw.getContentOutputStream());
             }
-            pdDocument.save(cw.getContentOutputStream());
         } catch (IOException | COSVisitorException e) {
             throw new TemplateProcessingException("Error occurred while filling values in the template.", e);
         }
