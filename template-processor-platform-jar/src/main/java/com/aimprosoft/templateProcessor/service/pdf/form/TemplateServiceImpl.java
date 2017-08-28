@@ -90,9 +90,7 @@ public class TemplateServiceImpl implements TemplateService {
             PDDocument pdDocument = PDDocument.load(cr.getContentInputStream());
             PDAcroForm acroForm = pdDocument.getDocumentCatalog().getAcroForm();
 
-            if (acroForm == null) {
-                logger.debug("Template doesn't have AcroForm.");
-            } else {
+            if (acroForm != null) {
                 @SuppressWarnings("unchecked")
                 List<PDField> fields = acroForm.getFields();
                 /*
@@ -113,6 +111,8 @@ public class TemplateServiceImpl implements TemplateService {
                 /* Save template */
                 ContentWriter cw = contentService.getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
                 pdDocument.save(cw.getContentOutputStream());
+            } else {
+                logger.debug("Template doesn't have AcroForm.");
             }
         } catch (IOException | COSVisitorException e) {
             throw new TemplateProcessingException("Error occurred while filling values in the template.", e);
