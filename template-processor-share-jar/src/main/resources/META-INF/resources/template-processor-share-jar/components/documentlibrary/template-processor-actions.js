@@ -1,31 +1,20 @@
 (function () {
-    YAHOO.Bubbling.fire("registerAction", {
-        actionName: "onActionProceedTemplate",
+    YAHOO.Bubbling.fire('registerAction', {
+        actionName: 'onActionProceedTemplate',
         fn: function (file) {
             this.widgets.waitDialog = Alfresco.util.PopupManager.displayMessage({
-                text: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.proceed"),
-                spanClass: "wait",
+                text: this.msg('com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.processing'),
+                spanClass: 'wait',
                 displayTime: 0
             });
             var popup = this.widgets.waitDialog;
             this.modules.actions.genericAction({
                 success: {
                     callback: {
-                        fn: function (response) {
+                        fn: function () {
                             popup.destroy();
-                            Alfresco.util.PopupManager.displayPrompt({
-                                title: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.success"),
-                                text: response.json.message,
-                                buttons: [{
-                                    text: this.msg("button.ok"),
-                                    handler: function () {
-                                        this.destroy();
-                                        YAHOO.Bubbling.fire("metadataRefresh");
-                                        YAHOO.Bubbling.fire("previewChangedEvent");
-                                    },
-                                    isDefault: true
-                                }]
-                            });
+                            YAHOO.Bubbling.fire('metadataRefresh');
+                            YAHOO.Bubbling.fire('previewChangedEvent');
                         },
                         scope: this
                     }
@@ -35,10 +24,10 @@
                         fn: function (response) {
                             popup.destroy();
                             Alfresco.util.PopupManager.displayPrompt({
-                                title: this.msg("com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.failure"),
+                                title: this.msg('com.aimprosoft.templateProcessor.action.ProceedTemplate.msg.error'),
                                 text: response.json.message,
                                 buttons: [{
-                                    text: this.msg("button.ok"),
+                                    text: this.msg('button.ok'),
                                     handler: function () {
                                         this.destroy();
                                     },
@@ -50,7 +39,7 @@
                     }
                 },
                 webscript: {
-                    name: "/aim/template-processor/fill-document?nodeRef={nodeRef}",
+                    name: '/aim/template-processor/fill-document?nodeRef={nodeRef}',
                     stem: Alfresco.constants.PROXY_URI,
                     method: Alfresco.util.Ajax.GET,
                     params: {
