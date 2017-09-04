@@ -3,10 +3,11 @@ package com.aimprosoft.templateProcessor.web.scripts;
 import com.aimprosoft.templateProcessor.exceptions.TemplateProcessingException;
 import com.aimprosoft.templateProcessor.service.pdf.form.TemplateService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.extensions.webscripts.*;
+import org.springframework.extensions.webscripts.Cache;
+import org.springframework.extensions.webscripts.DeclarativeWebScript;
+import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,6 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
     private TemplateService service;
 
     /* Messages */
-    private static final String RESPONSE_MSG = "All values were filled in the template. ";
     private static final String REQUEST_PARAM = "nodeRef";
 
     /**
@@ -37,9 +37,9 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
         try {
             NodeRef nodeRef = new NodeRef(req.getParameter(REQUEST_PARAM));
             service.fillTemplate(nodeRef);
-            model.put("message", RESPONSE_MSG);
         } catch (TemplateProcessingException e) {
-            throw new WebScriptException(e.getMessage(), e);
+            status.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            model.put("message", e.getMessage());
         }
         return model;
     }
