@@ -39,7 +39,7 @@ public class TemplateProcessorScript extends DeclarativeWebScript {
             service.fillTemplate(nodeRef);
         } catch (TemplateProcessingException e) {
             status.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            model.put("message", e.getMessage());
+            model.put("errorMessage", e.getMessage());
         }
         return model;
     }

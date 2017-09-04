@@ -1,3 +1,9 @@
+<#if errorMessage??>
 {
-    "message": "${message!""}"
+    "message": "${errorMessage}"
 }
+<#else>
+{
+    "message": "ok!"
+}
+</#if>
