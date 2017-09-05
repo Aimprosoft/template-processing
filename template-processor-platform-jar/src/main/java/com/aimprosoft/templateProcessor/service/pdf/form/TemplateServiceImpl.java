@@ -18,6 +18,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     /* Logger*/
     private static Log logger = LogFactory.getLog(TemplateServiceImpl.class);
+    /* Date Format */
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /* Alfresco Services */
     private ContentService contentService;
@@ -99,9 +103,9 @@ public class TemplateServiceImpl implements TemplateService {
                 */
                 for (PDField field : fields) {
                     String fieldName = field.getPartialName();
-                    String value = (String) propertyMap.get(createQName(fieldName));
+                    Serializable value = propertyMap.get(createQName(fieldName));
                     if (value != null) {
-                        field.setValue(value);
+                        field.setValue(parseValue(value));
                         logger.debug("Field from template was filled in: " + fieldName);
                     } else {
                         logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
@@ -137,6 +141,23 @@ public class TemplateServiceImpl implements TemplateService {
             }
         }
         return qName;
+    }
+
+    /**
+     * Parses value from {@link Serializable} to {@link String} from
+     * Alfresco repository, if it is {@link Date} converts it to {@link String}
+     *
+     * @param value {@code Serializable}
+     * @return result {@code String}
+     */
+    private String parseValue(Serializable value){
+        String result;
+        if(value instanceof Date){
+            result = dateFormat.format((Date)value);
+        } else {
+            result = value.toString();
+        }
+        return result;
     }
 
     /* Setters */
