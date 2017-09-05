@@ -145,7 +145,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     /**
      * Parses value from {@link Serializable} to {@link String} from
-     * Alfresco repository, if it is {@link Date} converts it to {@link String}
+     * Alfresco node properties, if it is {@link Date} - parses {@link String} from it
      *
      * @param value {@code Serializable}
      * @return result {@code String}
