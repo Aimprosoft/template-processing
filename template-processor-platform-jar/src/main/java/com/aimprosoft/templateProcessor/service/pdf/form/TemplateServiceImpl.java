@@ -2,8 +2,10 @@ package com.aimprosoft.templateProcessor.service.pdf.form;
 
 import com.aimprosoft.templateProcessor.exceptions.TemplateProcessingException;
 import com.aimprosoft.templateProcessor.models.TemplateProcessorModel;
+import com.aimprosoft.templateProcessor.utils.propertyConverter.Converter;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
@@ -33,10 +35,14 @@ public class TemplateServiceImpl implements TemplateService {
     /* Date Format */
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    /* Converter */
+    private static Converter converter = new Converter();
+
     /* Alfresco Services */
     private ContentService contentService;
     private NodeService nodeService;
     private NamespaceService namespaceService;
+    private DictionaryService dictionaryService;
 
     /**
      * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
@@ -103,9 +109,13 @@ public class TemplateServiceImpl implements TemplateService {
                 */
                 for (PDField field : fields) {
                     String fieldName = field.getPartialName();
-                    Serializable value = propertyMap.get(createQName(fieldName));
+                    QName propertyName = createQName(fieldName);
+                    Serializable value = propertyMap.get(propertyName);
                     if (value != null) {
-                        field.setValue(parseValue(value));
+                        /* Get Alfresco DataType */
+                        QName dataType = dictionaryService.getProperty(propertyName).getName();
+                        /* Convert value according to its DataType and Set it */
+                        field.setValue(converter.convert(dataType, value));
                         logger.debug("Field from template was filled in: " + fieldName);
                     } else {
                         logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
@@ -143,23 +153,6 @@ public class TemplateServiceImpl implements TemplateService {
         return qName;
     }
 
-    /**
-     * Parses value from {@link Serializable} to {@link String} from
-     * Alfresco node properties, if it is {@link Date} - parses {@link String} from it
-     *
-     * @param value {@code Serializable}
-     * @return result {@code String}
-     */
-    private String parseValue(Serializable value){
-        String result;
-        if(value instanceof Date){
-            result = dateFormat.format((Date)value);
-        } else {
-            result = value.toString();
-        }
-        return result;
-    }
-
     /* Setters */
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
@@ -171,5 +164,9 @@ public class TemplateServiceImpl implements TemplateService {
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 }
