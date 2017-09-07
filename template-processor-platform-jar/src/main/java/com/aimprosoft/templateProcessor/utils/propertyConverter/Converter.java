@@ -26,7 +26,7 @@ public class Converter {
     /**
      * Constructor. Creates a {@link #actions} actions of {@link QName qName}, {@link Action action}
      */
-    public Converter(){
+    public Converter() {
         actions = new HashMap<>();
 
         actions.put(DataTypeDefinition.DATE.getLocalName(), new DateAction());
@@ -38,20 +38,24 @@ public class Converter {
      * Converts a value {@link Serializable} to {@link String} according to
      * its {@link QName} type
      *
-     * @param type Alfresco {@link DataTypeDefinition#getName()}
+     * @param type  Alfresco {@link DataTypeDefinition#getName()}
      * @param value value to convert
      * @return converted value
-     *
      * @see DataTypeDefinition
      * @see QName
      */
-    public String convert(QName type, Serializable value){
+    public String convert(QName type, Serializable value) {
         String result;
+        String name = null;
+        /* Check if type is not null and get its local name */
+        if (type != null) {
+            name = type.getLocalName();
+        }
         /* Get action by type */
-        Action action = actions.get(type.getLocalName());
+        Action action = actions.get(name);
 
         /* Execute action if it's found or call value#toString() */
-        if(action != null){
+        if (action != null) {
             result = action.execute(value);
         } else {
             result = value.toString();

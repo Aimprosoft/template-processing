@@ -6,6 +6,7 @@ import com.aimprosoft.templateProcessor.utils.propertyConverter.Converter;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
@@ -21,7 +22,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (!nodeService.exists(nodeRef)) {
             throw new TemplateProcessingException("Node '" + nodeRef.toString() + "' doesn't exist.");
         }
-        if(!nodeService.hasAspect(nodeRef, TemplateProcessorModel.ASPECT_TEMPLATE)){
+        if (!nodeService.hasAspect(nodeRef, TemplateProcessorModel.ASPECT_TEMPLATE)) {
             throw new TemplateProcessingException("The document doesn't have required aspect 'aim:template'.");
         }
         String mimeType = contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT).getMimetype();
@@ -111,11 +111,18 @@ public class TemplateServiceImpl implements TemplateService {
                     String fieldName = field.getPartialName();
                     QName propertyName = createQName(fieldName);
                     Serializable value = propertyMap.get(propertyName);
+
                     if (value != null) {
                         /* Get Alfresco DataType */
-                        QName dataType = dictionaryService.getProperty(propertyName).getName();
+                        QName dataType = null;
+                        PropertyDefinition property = dictionaryService.getProperty(propertyName);
+                        /* Check if property exists */
+                        if (property != null) {
+                            dataType = property.getName();
+                        }
                         /* Convert value according to its DataType and Set it */
                         field.setValue(converter.convert(dataType, value));
+
                         logger.debug("Field from template was filled in: " + fieldName);
                     } else {
                         logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);

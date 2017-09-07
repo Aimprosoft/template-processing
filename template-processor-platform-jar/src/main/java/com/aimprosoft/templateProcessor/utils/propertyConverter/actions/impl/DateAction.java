@@ -13,7 +13,7 @@ import java.util.Locale;
 public class DateAction implements Action {
 
     /* Date Format */
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     /**
      * Converts Alfresco {@link Date} to {@link String} using

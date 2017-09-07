@@ -12,7 +12,7 @@ import java.util.Date;
 public class DateTimeAction implements Action {
 
     /* DateTime Format */
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 
     /**
      * Converts Alfresco {@link Date} to {@link String} using
