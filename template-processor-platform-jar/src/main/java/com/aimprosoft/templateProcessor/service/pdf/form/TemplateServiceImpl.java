@@ -2,8 +2,11 @@ package com.aimprosoft.templateProcessor.service.pdf.form;
 
 import com.aimprosoft.templateProcessor.exceptions.TemplateProcessingException;
 import com.aimprosoft.templateProcessor.models.TemplateProcessorModel;
+import com.aimprosoft.templateProcessor.utils.propertyConverter.Converter;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
@@ -18,6 +21,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +32,17 @@ public class TemplateServiceImpl implements TemplateService {
 
     /* Logger*/
     private static Log logger = LogFactory.getLog(TemplateServiceImpl.class);
+    /* Date Format */
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    /* Converter */
+    private static Converter converter = new Converter();
 
     /* Alfresco Services */
     private ContentService contentService;
     private NodeService nodeService;
     private NamespaceService namespaceService;
+    private DictionaryService dictionaryService;
 
     /**
      * <p>Fills values to <span>PDF-document</span> with given {@code nodeRef}
@@ -52,7 +62,7 @@ public class TemplateServiceImpl implements TemplateService {
         if (!nodeService.exists(nodeRef)) {
             throw new TemplateProcessingException("Node '" + nodeRef.toString() + "' doesn't exist.");
         }
-        if(!nodeService.hasAspect(nodeRef, TemplateProcessorModel.ASPECT_TEMPLATE)){
+        if (!nodeService.hasAspect(nodeRef, TemplateProcessorModel.ASPECT_TEMPLATE)) {
             throw new TemplateProcessingException("The document doesn't have required aspect 'aim:template'.");
         }
         String mimeType = contentService.getReader(nodeRef, ContentModel.TYPE_CONTENT).getMimetype();
@@ -99,9 +109,20 @@ public class TemplateServiceImpl implements TemplateService {
                 */
                 for (PDField field : fields) {
                     String fieldName = field.getPartialName();
-                    String value = (String) propertyMap.get(createQName(fieldName));
+                    QName propertyName = createQName(fieldName);
+                    Serializable value = propertyMap.get(propertyName);
+
                     if (value != null) {
-                        field.setValue(value);
+                        /* Get Alfresco DataType */
+                        QName dataType = null;
+                        PropertyDefinition property = dictionaryService.getProperty(propertyName);
+                        /* Check if property exists */
+                        if (property != null) {
+                            dataType = property.getName();
+                        }
+                        /* Convert value according to its DataType and Set it */
+                        field.setValue(converter.convert(dataType, value));
+
                         logger.debug("Field from template was filled in: " + fieldName);
                     } else {
                         logger.debug("Field from template wasn't found in meta-data properties: " + fieldName);
@@ -150,5 +171,9 @@ public class TemplateServiceImpl implements TemplateService {
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 }
