@@ -9,5 +9,6 @@
         <property name="contentService" ref="ContentService" />
         <property name="nodeService" ref="nodeService" />
         <property name="namespaceService" ref="namespaceService" />
+        <property name="dictionaryService" ref="DictionaryService" />
     </bean>
 </beans>
